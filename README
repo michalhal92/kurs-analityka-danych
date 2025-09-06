@@ -15,8 +15,11 @@ Podczas kursu rozwijałem m.in.:
 ---
 
 ## 🎱 Projekt końcowy
+
 Cel: Przeanalizuj dane Airbnb, aby zrozumieć, które czynniki najbardziej wpływają na ceny wynajmu i zaproponuj strategie, które pomogą nowym gospodarzom ustalać konkurencyjne ceny swoich ofert.
+
 Narzędzia: Python, Tableau
+
 Wnioski i rekomendacje: 
 - Lokalizacja ma największy wpływ na cenę, różnice średnich między osiedlami mogą być bardzo duże, pomiędzy dzielnicami nie są już tak istotne.
 - Typ pokoju również ma znaczenie. 
