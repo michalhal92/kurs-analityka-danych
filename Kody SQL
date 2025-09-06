@@ -1,0 +1,729 @@
+**1. Podstawowe zapytania: SELECT**
+
+#Zadanie 1.3: Wyświetl nazwę (ProductName) i cenę (Price) wszystkich produktów z tabeli Products.
+SELECT ProductName, Price,
+FROM `sklep.Products`;
+
+**2. Filtrowanie danych: WHERE**
+#Zadanie 2.2: Znajdź produkty z tabeli Products, które kosztują więcej niż 100.
+select ProductName, Price
+from `sklep.Products`
+where Price > 100;
+
+#Zadanie 2.3: Pobierz dane klientów (FirstName, LastName) z tabeli Customers, którzy mieszkają w Kanadzie.
+select FirstName, LastName,
+from `sklep.Customers`
+where Country = 'Canada';
+
+#Zadanie 2.4: Wyświetl zamówienia z tabeli Orders, których TotalAmount wynosi pomiędzy 500 a 1000.
+select *
+from `sklep.Orders`
+where TotalAmount between 500 and 1000;
+
+**3. Sortowanie danych: ORDER BY**
+
+#Zadanie 3.2: Pobierz dane klientów (FirstName, LastName, Country) z tabeli Customers, posortowane alfabetycznie według kraju (Country).
+select FirstName, LastName, Country
+from `sklep.Customers`
+order by Country;
+
+#Zadanie 3.3: Wyświetl wszystkie zamówienia (OrderID, OrderDate, TotalAmount) z tabeli Orders, posortowane według daty (OrderDate) w porządku #rosnącym.
+select OrderID, OrderDate, TotalAmount
+from `sklep.Orders`
+order by OrderDate;
+
+**#4. Kombinacja filtrowania i sortowania**
+
+#Zadanie 4.2: Wyświetl klientów (FirstName, LastName, Country) z tabeli Customers, którzy mieszkają w „USA” lub „Canada”. Posortuj wyniki według #nazwiska w porządku alfabetycznym.
+select FirstName, LastName, Country
+from `sklep.Customers`
+where Country = 'USA' or
+      Country = 'Canada'
+order by LastName;
+
+#Zadanie 4.3: Znajdź zamówienia (OrderID, CustomerID, TotalAmount) z tabeli Orders, które mają TotalAmount większe niż 1000. Posortuj wyniki #według TotalAmount w kolejności malejącej.
+select OrderID, CustomerID, TotalAmount
+from `sklep.Orders`
+where TotalAmount > 1000
+order by TotalAmount desc;
+
+**Sekcja 1: Filtrowanie danych**
+
+#Wyświetl szczegóły zamówień (OrderID, OrderDate, TotalAmount) z tabeli Orders, które:
+#Zostały złożone po 1 stycznia 2023 roku i mają wartość powyżej 500, lub
+#Nie mają przypisanej daty wysyłki (ShippedDate IS NULL).
+select OrderID, OrderDate, TotalAmount, ShippedDate
+from `sklep.Orders`
+where OrderDate > '2023-01-01' and TotalAmount > 500
+  or ShippedDate is null;
+
+**Pobierz dane klientów (FirstName, LastName, Email) z Kanady, którzy mają adres e-mail.**
+select FirstName, LastName, Email
+from `sklep.Customers`
+where Country = 'Canada'
+    and Email is not null
+
+**Sekcja 2: Obsługa wartości NULL**
+#Filtrowanie z IS NOT NULL
+#Wyświetl wszystkie zamówienia (OrderID, CustomerID, ShippedDate), które mają przypisaną datę wysyłki.
+select OrderID, CustomerID, ShippedDate
+from `sklep.Orders`
+where ShippedDate is not null;
+
+#Znajdź magazyny (WarehouseName, Location), które:
+#Znajdują się w “Chicago” lub “San Francisco”.
+select WarehouseName, Location,
+from `sklep.Warehouses`
+where Location='Chicago' or Location='San Francisco';
+
+#Ich nazwa zaczyna się na literę “C”.
+select WarehouseName, Location,
+from `sklep.Warehouses`
+where WarehouseName like "C%";
+
+#Znajdź produkty (ProductName, Category, Price) z tabeli Products, które:
+#Należą do kategorii “Electronics” i mają cenę wyższą niż 400.
+#Lub należą do kategorii “Accessories” i mają cenę w zakresie od 20 do 100.
+select ProductName, Category, Price,
+from `sklep.Products`
+where (Category='Electronics' and Price > 400)
+   or (Category='Accessories' and Price between 20 and 100);
+
+
+#Przygotuj raport produktów (ProductName, Category, Price), który:Zawiera pierwsze 5 znaków nazw produktów.Zmienia #kategorię “Electronics” na “Elektronika”.Wyświetla ceny z dodanym prefiksem “Cena: ”.
+select substring(ProductName, 1, 5) as Nazwa_skrocona,
+       replace(Category, "Electronics", "Elektronika"),
+       concat('Cena: ', Price) as Cena,
+from `sklep.Products`;
+
+#Połącz dane klientów:Połącz imię i nazwisko klientów w jedną kolumnę „Pełne Imię”.Wyświetl tylko klientów, którzy #mają przypisany adres e-mail.
+select concat(FirstName, ' ', LastName) as `Pełne Imię`,
+from `sklep.Customers`
+where Email is not null;
+
+#Wyciągnij fragmenty tekstu: Wyciągnij pierwsze 3 znaki z nazw produktów i nadaj alias `Skrót Nazwy`.Wyświetl tylko #produkty z ceną powyżej 300.
+select substring(ProductName, 1, 3) as Skrot_nazwy
+from `sklep.Products`
+where Price > 300;
+
+#Zmiana wielkości liter: Wyświetl wszystkie nazwy produktów w wielkich literach. Wyświetl tylko produkty z kategorii ‘Accessories’.
+select upper(ProductName) as Nazwa_produktu
+from `sklep.Products`
+where Category='Accessories';
+
+#Zamiana fragmentów tekstu:
+#Zamień w nazwach produktów słowo “Phone” na “Device”.Wyświetl produkty, które zawierają cenę większą niż 500.
+select replace(ProductName, 'Phone', 'Device'),
+from `sklep.Products`
+where Price>500;
+
+#Długość tekstu:
+#Oblicz liczbę znaków w nazwach produktów.Wyświetl tylko produkty, których długość nazwy wynosi więcej niż 7 znaków.
+select ProductName, length(ProductName) as Dlugosc_nazwy_produktu,
+from `sklep.Products`
+where length(ProductName)>7;
+
+#Fragmenty z lewej i prawej strony:
+#Wyciągnij pierwsze 2 znaki z nazw magazynów.Wyciągnij ostatnie 3 znaki z nazw produktów.
+select WarehouseName, left(WarehouseName, 2) as Nazwa_skrocona
+from `sklep.Warehouses`;
+
+select ProductName, right(ProductName, 3)
+from `sklep.Products`;
+
+#Usuwanie białych znaków:
+#Usuń białe znaki z początku i końca nazw magazynów.Wyświetl wszystkie oczyszczone nazwy magazynów.
+select trim(WarehouseName) as Oczyszczone_nazwy_magazynow,
+from `sklep.Warehouses`;
+
+#Przygotuj raport dla produktów (ProductName, Category, Price), który:
+#Wyciąga pierwsze 4 znaki z nazwy produktu.
+#Zmienia kategorię “Accessories” na “Akcesoria”.
+select left(ProductName,4) as Nazwa_produktu_skrocona, replace(Category, 'Accessories', 'Akcesoria') as Category_edytowane, Price
+from `sklep.Products`; 
+
+#Dodaj 20 do ceny każdego produktu i wyświetl wynik jako Cena z Transportem.
+select Price+20 as `Cena z transportem`,
+from `sklep.Products`;
+
+#Wyświetl nazwy produktów i ich ceny po rabacie 12.5%.
+select ProductName,
+        Price*0.875 as `Cena po rabacie`
+from `sklep.Products`;
+
+
+
+#Znajdź zamówienia starsze niż 180 dni, wyświetlając ich OrderID, OrderDate i wiek zamówienia w miesiącach.
+select OrderID,
+        OrderDate,
+        date_diff(current_date(), date(OrderDate), month) AS `Wiek zamówienia w miesiacach`,
+from `sklep.Orders`
+where timestamp_diff(current_timestamp(), OrderDate, day)>180;
+
+#Wyciągnij zamówienia złożone w maju 2024 roku.
+select *
+from `sklep.Orders`
+where OrderDate between '2024-05-01' and '2024-05-31';
+
+#Dodaj 7 dni do daty zamówienia i wyświetl jako Data Wysyłki.
+select date(date_add(OrderDate, INTERVAL 7 day)) as `Data wysyłki`,
+        date(OrderDate) as `Data zamówienia`
+from `sklep.Orders`;
+
+#Wyświetl zamówienia z datą w formacie DD-MM-YYYY.
+select format_date('%d-%m-%Y', TIMESTAMP(OrderDate)) as `Data w formacie DD-MM-YYYY`
+from `sklep.Orders`;
+
+#Dla każdego zamówienia wyświetl, OrderID, OrderDate, Wiek zamówienia w dniach, Całkowitą wartość zamówienia zaokrągloną do 2 miejsc po #przecinku, cenę jednostkową (TotalAmount podzielone przez Quantity).
+select OrderID,
+        OrderDate,
+        timestamp_diff(current_timestamp(), OrderDate, day) as `Wiek zamówienia w dniach`,
+        round(TotalAmount, 2) as `Całkowita wartość zamówienia zaokrągloną do 2 miejsc po przecinku`,
+        TotalAmount/Quantity as `Cena jednostkowa`
+from `sklep.Orders`;
+
+#Konwertuj kolumnę Quantity na typ FLOAT64 i pomnóż przez 1.1
+select cast(Quantity as float64)*1.1
+from `sklep.Orders`;
+
+#Wyświetl OrderID, datę zamówienia w formacie YYYY-MM-DD, oraz cenę po dodaniu 10% podatku.
+select OrderID,
+        format_date('%Y-%m-%d', TIMESTAMP(OrderDate)) as `Data w formacie YYYY-MM-DD`,
+        TotalAmount*1.1 as `Cena z podatkiem 10%`
+from `sklep.Orders`;
+
+#Wyświetl OrderID, cenę po rabacie 15%, oraz wiek zamówienia w dniach.
+select OrderID,
+        TotalAmount*0.85,
+        timestamp_diff(current_timestamp(), OrderDate, day) as `Wiek zamówienia w dniach`
+        from `sklep.Orders`;
+
+#Oblicz liczbę dni od daty zamówienia do dzisiaj.
+select timestamp_diff(current_timestamp(), OrderDate, day) as `Liczba dni od daty zamówienia`,
+from `sklep.Orders`
+
+#Z1 Wyświetl zamówienia z ostatnich 180 dni wraz z nazwiskami klientów.#
+SELECT ORDERS.*,
+        LastName,
+        TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), OrderDate, DAY) AS `WIEK ZAMÓWIENIA W DNIACH`
+FROM `sklep.Orders` AS ORDERS
+LEFT JOIN `sklep.Customers` AS CUSTOMERS
+ON ORDERS.CustomerID = CUSTOMERS.CustomerID
+WHERE TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), OrderDate, DAY)>180
+
+#Z2 Wyświetl listę 10  najdroższych zamówień z nazwą produktu, jego kategorią oraz całkowitą kwotą zamówienia.
+SELECT orders.OrderID,
+        products.ProductName,
+        products.Category,
+        orders.TotalAmount
+FROM `sklep.Orders` as orders
+LEFT JOIN `sklep.Products` as products
+ON orders.ProductID = products.ProductID
+where TotalAmount is not null
+order by orders.TotalAmount desc
+limit 10;
+
+#uwzględnia zamówienie 5324 które nie ma kategorii ani nazwy produktu, w moim rozumieniu polecenia - poprawnie
+
+#dla sprawdzenia podgląd tego zamówienia - 5324
+select OrderID, TotalAmount, ProductID, Quantity, WarehouseID, CustomerID, OrderDate, ShippingAddress, ShippedDate
+from `sklep.Orders`
+where OrderID=5324
+
+#Z3 Połącz dane z tabel Orders, Products, Inventory oraz Warehouses, aby wyświetlić szczegółowy raport dla każdego zamówienia, zawierający nazwę produktu, magazyn, w którym produkt się znajduje, oraz ilość stanu magazynowego.
+select orders.OrderID,
+        products.ProductName,
+        warehouses.WarehouseName,
+        inventory.StockLevel
+from `sklep.Orders` as orders
+left join `sklep.Products` as products
+on orders.ProductID = products.ProductID
+left join `sklep.Inventory` as inventory
+on products.ProductID = inventory.ProductID
+left join `sklep.Warehouses` as warehouses
+on inventory.WarehouseID = warehouses.WarehouseID;
+
+#Z4 Połącz dane z tabel Warehouses, Inventory, i Products, aby wyświetlić wszystkie magazyny i produkty w nich przechowywane oraz datę kiedy został zarejestrowany inwentarz.
+select  warehouses.WarehouseName as `Nazwa magazynu`,
+        products.ProductName as `Nazwa produktu`,
+        inventory.Date as `Data zarejestrowania inwantarza`
+from `sklep.Inventory` as inventory
+left join `sklep.Warehouses` as warehouses
+on inventory.WarehouseID = warehouses.WarehouseID
+left join `sklep.Products` as products
+on inventory.ProductID = products.ProductID
+order by WarehouseName;
+
+#Z5  Wyświetl szczegóły wszystkich zamówień i powiązanych do nich rabatów.
+select orders.*,
+        discounts.*
+from `sklep.Orders` as orders
+left join `sklep.Discounts` as discounts
+on orders.ProductID = discounts.ProductID
+  and cast(orders.OrderDate as date) between discounts.StartDate and discounts.EndDate;
+
+# zawarłem warunek złożenia zamówienia w okresie trwania rabatu, jeżeli dobrze zrozumiałem zadanie i dane w tabeli discounts
+
+#Z6 Połącz dane z tabel Orders i Payments, aby wyświetlić pełną listę zamówień i płatności, nawet jeśli zamówienia nie mają płatności lub płatności nie są powiązane z zamówieniami.
+select orders.*,
+        payments.*
+from `sklep.Orders` as orders
+full join `sklep.Payments` as payments
+on orders.OrderID = payments.OrderID;
+
+#Z7 Wyświetl wszystkie zamówienia z ostatnich 180 dni, wraz z nazwą produktu i kategorią, do której należy produkt.
+select orders.*,
+        products.ProductName,
+        categories.CategoryName
+from `sklep.Orders` as orders
+left join `sklep.Products` as products
+on orders.ProductID=products.ProductID
+left join `sklep.Categories` as categories
+on products.CategoryID = categories.CategoryID
+where timestamp_diff(current_timestamp(), orders.OrderDate, day)>180;
+
+#Z8*  Zadanie z * (dodatkowe) Wyświetl listę klientów, którzy otrzymali rabat na swoje zamówienia. Pokaż nazwisko klienta, rodzaj rabatu i całkowitą wartość zamówienia.
+select  customers.LastName,
+        discounts.DiscountType,
+        orders.TotalAmount
+from `sklep.Orders` as orders
+left join `sklep.Customers` as customers
+on orders.CustomerID = customers.CustomerID
+left join `sklep.Discounts` as discounts
+on orders.ProductID = discounts.ProductID
+  and cast(orders.OrderDate as date) between discounts.StartDate and discounts.EndDate
+where discounts.DiscountID is not null
+#DiscountID jest zawsze not null - sprawdzone
+
+#Ćwiczenie 1  Liczba zamówień dla każdego klienta W tabeli Orders, policz liczbę zamówień dla każdego klienta.
+select CustomerID,
+       count(TotalAmount) as `Ilość zamówień`
+from `sklep.Orders`
+group by CustomerID
+having CustomerID is not null
+order by CustomerID;
+
+#Ćwiczenie 2:  Całkowita wartość zamówień dla magazynów W tabeli Orders, policz łączną wartość zamówień obsługiwanych przez każdy magazyn.
+select orders.WarehouseID,
+        warehouses.WarehouseName,
+        round(sum(orders.TotalAmount), 2) AS `Wartość zamówień obsłużonych przez magazyn`
+from `sklep.Orders` as orders
+left join `sklep.Warehouses` as warehouses
+on orders.WarehouseID = warehouses.WarehouseID
+group by WarehouseID, WarehouseName
+order by WarehouseID;
+
+#Ćwiczenie 3:  Średnia wartość zamówienia dla kategorii produktów W tabelach Orders i Products, oblicz średnią wartość zamówień dla każdej kategorii produktów.
+select PRODUCTS.Category,
+        avg(ORDERS.TotalAmount) AS `Średnia wartość zamówienia w kategorii`
+from `sklep.Orders` AS ORDERS
+LEFT JOIN `sklep.Products` AS PRODUCTS
+ON ORDERS.ProductID=PRODUCTS.ProductID
+GROUP BY PRODUCTS.Category;
+
+#Ćwiczenie 4:  Liczba produktów w magazynach W tabeli Inventory, policz liczbę różnych produktów przechowywanych w każdym magazynie.
+SELECT WAREHOUSES.WarehouseName,
+        COUNT(DISTINCT INVENTORY.ProductID) AS `Ilość różnych produktów w magazynie`
+FROM `sklep.Inventory` AS INVENTORY
+LEFT JOIN `sklep.Warehouses` AS WAREHOUSES
+ON INVENTORY.WarehouseID=WAREHOUSES.WarehouseID
+GROUP BY WAREHOUSES.WarehouseName;
+
+#Ćwiczenie 5: Filtracja grup z HAVING W tabeli Orders, znajdź klientów, którzy złożyli co najmniej 5 zamówień o łącznej wartości przekraczającej 2000.
+select CustomerID,
+        sum(TotalAmount) as `Łączna wartość zamówień`
+from `sklep.Orders`
+group by CustomerID
+having sum(TotalAmount)>2000 and count(OrderID)>5;
+
+#Ćwiczenie 6:  Produkty o dużej sprzedaży W tabelach Products i Orders, znajdź produkty, które wygenerowały łącznie więcej niż 3000 w sprzedaży.
+SELECT PRODUCTS.ProductName,
+        SUM(TotalAmount) AS `Suma wartosci sprzedaży`
+FROM `sklep.Products` AS PRODUCTS
+LEFT JOIN `sklep.Orders` AS ORDERS
+ON PRODUCTS.ProductID=ORDERS.ProductID
+GROUP BY PRODUCTS.ProductName
+HAVING SUM(TotalAmount)>3000;
+
+#Ćwiczenie 7:  Najlepsze magazyny W tabelach Inventory i Warehouses, znajdź magazyny z największym poziomem zapasów w pierwszej połowie roku 2024, posortowane malejąco według sumarycznej liczby #produktów.
+
+#POSORTOWANE WG SUMY POZIOMU ZAPASÓW
+SELECT WAREHOUSES. WarehouseName,
+        SUM(INVENTORY.StockLevel) AS `Suma poziomu zapasów`
+FROM `sklep.Warehouses` AS WAREHOUSES
+LEFT JOIN `sklep.Inventory` AS INVENTORY
+ON WAREHOUSES.WarehouseID=INVENTORY.WarehouseID
+WHERE INVENTORY.Date BETWEEN "2024-01-01" AND "2024-05-30"
+GROUP BY WAREHOUSES.WarehouseName
+ORDER BY SUM(INVENTORY.StockLevel) DESC;
+
+#POSORTOWANE WG LICZBY UNIKALNYCH PRODUKTÓW
+SELECT WAREHOUSES. WarehouseName,
+        SUM(INVENTORY.StockLevel) AS `Suma poziomu zapasów`,
+        COUNT(DISTINCT INVENTORY.ProductID) `Liczba unikalnych produktów`
+FROM `sklep.Warehouses` AS WAREHOUSES
+LEFT JOIN `sklep.Inventory` AS INVENTORY
+ON WAREHOUSES.WarehouseID=INVENTORY.WarehouseID
+WHERE INVENTORY.Date BETWEEN "2024-01-01" AND "2024-05-30"
+GROUP BY WAREHOUSES.WarehouseName
+ORDER BY COUNT(DISTINCT INVENTORY.ProductID) DESC;
+
+#Ćwiczenie 8:  Rabaty w zamówieniach W tabelach Orders i Discounts, znajdź zamówienia, w których zastosowano rabaty powyżej 10 USD..
+SELECT O.OrderID,
+        D.DiscountValue,
+FROM `sklep.Discounts` AS D
+LEFT JOIN `sklep.Orders` AS O
+ON D.ProductID=O.ProductID
+WHERE D.DiscountValue>10 and CAST(O.OrderDate AS DATE) BETWEEN D.StartDate and D.EndDate;
+
+#Ćwiczenie 9: Sprzedaż według regionu i kategorii klientów W tabelach Orders i Customers, znajdź łączną wartość zamówień według kraju.
+#KOD JEŻELI ROZUMIEĆ REGION JAKO KRAJ
+SELECT C.Country,
+        ROUND(SUM(O.TotalAmount), 2) AS `Suma sprzedaży`,
+FROM `sklep.Orders` AS O
+LEFT JOIN `sklep.Customers` AS C
+ON C.CustomerID=O.CustomerID
+GROUP BY C.Country;
+
+#KOD JEŻELI ROZUMIEĆ REGION JAKO KOD POCZTOWY, NIE POKAZUJE WTEDY SUMY SPRZEDAŻY NA KRAJ
+SELECT C.Country,
+        C.PostalCode,
+        ROUND(SUM(O.TotalAmount), 2) AS `Suma sprzedaży`,
+FROM `sklep.Orders` AS O
+LEFT JOIN `sklep.Customers` AS C
+ON C.CustomerID=O.CustomerID
+GROUP BY C.Country, C.PostalCode;
+
+#Ćwiczenie 10: Średnia wartość zamówień dla najlepszych klientów W tabelach Orders i Customers, znajdź średnią wartość zamówienia dla klientów, którzy wydali więcej niż 1 000 w sumie.
+SELECT O.CustomerID,
+        AVG(O.TotalAmount) AS `Średnia wartość zamówienia klienta`
+FROM `sklep.Orders` AS O
+LEFT JOIN `sklep.Customers` AS C
+ON O.CustomerID=C.CustomerID
+GROUP BY O.CustomerID
+HAVING SUM(O.TotalAmount) > 1000
+ORDER BY O.CustomerID;
+
+#Ćwiczenie 11: Wyodrębnianie i Grupowanie według Miesiąca. W tabeli Orders, policz łączną wartość zamówień dla każdego miesiąca.
+SELECT FORMAT_DATE('%Y-%m', O.OrderDate) AS `Miesiąc zamówienia`,
+        ROUND(SUM(O.TotalAmount), 2) as `Łączna wartość zamówień`
+FROM `sklep.Orders` as O
+GROUP BY `Miesiąc zamówienia`
+HAVING `Miesiąc zamówienia` IS NOT NULL
+ORDER BY `Miesiąc zamówienia`;
+
+#Ćwiczenie 12: Grupowanie według Produktów i Magazynów. W tabelach Products i Inventory, znajdź maksymalny poziom zapasów dla każdego produktu w każdym magazynie.
+#v1 - zwraca najwyższy StockLevel dla każdego z produktów
+SELECT P.ProductName,
+        MAX(I.StockLevel) AS `ZAPAS PRODUKTU W NAJBARDZIEJ ZATOWAROWANYM MAGAZYNIE`
+FROM `sklep.Inventory` AS I
+LEFT JOIN `sklep.Products` AS P
+ON I.ProductID=P.ProductID
+GROUP BY P.ProductName
+ORDER BY P.ProductName;
+
+#V2 ZWRACA STANY ZAPASÓW PRODUKTU POSORTOWANE OD NAJWYŻSZEGO
+SELECT P.ProductName,
+        MAX(I.StockLevel) AS `ZAPAS PRODUKTU W NAJBARDZIEJ ZATOWAROWANYM MAGAZYNIE`,
+        W.WarehouseName
+FROM `sklep.Inventory` AS I
+LEFT JOIN `sklep.Products` AS P
+ON I.ProductID=P.ProductID
+LEFT JOIN `sklep.Warehouses` AS W
+ON I.WarehouseID=W.WarehouseID
+GROUP BY P.ProductName, W.WarehouseName
+ORDER BY P.ProductName, `ZAPAS PRODUKTU W NAJBARDZIEJ ZATOWAROWANYM MAGAZYNIE` desc;
+
+#V3 ZWRACA SUMĘ ZAPASÓW PRODUKTU ZE WSZYSTKICH MAGAZYNÓW
+SELECT P.ProductName,
+        SUM(I.StockLevel) AS `SUMA ZAPASÓW PRODUKTU WE WSZYSTKICH MAGAZYNACH`
+FROM `sklep.Inventory` AS I
+LEFT JOIN `sklep.Products` AS P
+ON I.ProductID=P.ProductID
+GROUP BY P.ProductName
+
+
+#Ćwiczenie 13: Filtrowanie i Grupowanie według Produktów. W tabelach Products i Orders, znajdź średnią wartość zamówienia dla produktów, które zaczynają się na literę 'P'.
+
+#Uwzględnia tylko produkty które były zamawiane
+SELECT P.ProductName,
+        ROUND(AVG(O.TotalAmount), 2) AS `Średnia wartość zamówienia dla produktu`
+FROM `sklep.Orders` AS O
+LEFT JOIN `sklep.Products` AS P
+ON O.ProductID=P.ProductID
+GROUP BY P.ProductName
+HAVING P.ProductName LIKE 'P%';
+
+#Uwzględnia produkty które nie miały zamówień
+SELECT P.ProductName,
+IFNULL((ROUND(AVG(O.TotalAmount), 2)), 0) AS `Średnia wartość zamówienia dla produktu`
+FROM `sklep.Products` AS P
+LEFT JOIN `sklep.Orders` AS O
+ON O.ProductID=P.ProductID
+GROUP BY P.ProductName
+HAVING P.ProductName LIKE 'P%';
+
+#Ćwiczenie 14: Funkcja ROUND w Grupowaniu. W tabeli Orders, policz średnią wartość zamówień zaokrągloną do dwóch miejsc po przecinku dla każdego klienta.
+SELECT O.CustomerID,
+        ROUND(AVG(O.TotalAmount), 2) AS `Średnia wartość zamówień klienta`
+FROM `sklep.Orders` AS O
+GROUP BY O.CustomerID
+HAVING O.CustomerID IS NOT NULL
+ORDER BY O.CustomerID
+
+#Ćwiczenie 15: Wykorzystanie Funkcji LENGTH i Grupowanie. W tabeli Products, znajdź minimalną wartość zapasów w magazynie dla produktów, których nazwy mają więcej niż 10 znaków.
+SELECT P.ProductName,
+        MIN(I.StockLevel) `Minimalny poziom zapasów w magazynie`
+FROM `sklep.Inventory` AS I
+LEFT JOIN `sklep.Products` AS P
+ON I.ProductID=P.ProductID
+GROUP BY P.ProductName
+HAVING LENGTH(P.ProductName)>10
+
+#Zadanie 1: Podzapytanie w klauzuli SELECT. Znajdź OrderID i wartość zamówienia TotalAmount dla każdego zamówienia, a obok wyświetl średnią #wartość zamówień.
+select OrderID,
+        TotalAmount,
+        (SELECT AVG(TotalAmount) FROM `sklep.Orders`) as SredniaWartoscZamowieniaTotal
+from `sklep.Orders`;
+
+#Zadanie 2: Podzapytanie w klauzuli WHERE. Znajdź wszystkie zamówienia, których wartość jest nie większa niż średnia wartość zamówień dla wszystkich klientów.
+select OrderID, TotalAmount,  
+from `sklep.Orders`
+where TotalAmount <= (select avg(TotalAmount) from `sklep.Orders`);
+
+#Zadanie 3: Podzapytanie w klauzuli FROM. Znajdź łączną wartość zamówień z uwzględnieniem 10% rabatu dla wszystkich zamówień dla każdego klienta, #używając podzapytania w FROM.
+select CustomerID,
+        LacznaWartoscZamowienPoRabacie
+from (select CustomerID, sum(TotalAmount)*0.90 as LacznaWartoscZamowienPoRabacie from `sklep.Orders` group by CustomerID)
+group by CustomerID, LacznaWartoscZamowienPoRabacie
+select CustomerID,
+        LacznaWartoscZamowienPoRabacie
+from (select CustomerID, sum(TotalAmount)*0.90 as LacznaWartoscZamowienPoRabacie from `sklep.Orders` group by CustomerID)
+group by CustomerID, LacznaWartoscZamowienPoRabacie
+
+#Zadanie 4: Skorelowane Podzapytanie. Znajdź zamówienia, które mają wartość niewiększą niż średnia wartość zamówień dla danego klienta.
+select OrderID,
+        TotalAmount,
+from `sklep.Orders` as o
+where TotalAmount <= (
+  select avg(TotalAmount)
+  from `sklep.Orders` as o1
+  where o.CustomerID=o1.CustomerID);
+
+#Zadanie 5: Podzapytanie z Produktem o Maksymalnej Sprzedaży. Znajdź szczegóły zamówienia (OrderID i TotalAmount) dla produktu, który osiągnął #najwyższą wartość sprzedaży.
+SELECT o.OrderID, o.TotalAmount
+FROM `sklep.Orders` as o
+WHERE ProductID =
+(
+SELECT ProductID
+FROM `sklep.Orders` as o1
+WHERE o1.ProductID IS NOT NULL
+GROUP BY o1.ProductID
+ORDER BY SUM(o1.TotalAmount) DESC
+LIMIT 1
+);
+
+#Zadanie 6: Podstawowe CTE Stwórz CTE, które obliczy sumaryczną wartość zamówień dla każdego klienta. Wyświetl tylko tych klientów, którzy wydali #więcej niż 2000.
+WITH Klienci2000 AS
+(
+  SELECT CustomerID, SUM(TotalAmount) AS SumaWartosciZamowien
+  FROM `sklep.Orders`
+  GROUP BY CustomerID
+  ORDER BY CustomerID
+)
+SELECT *
+FROM Klienci2000
+WHERE SumaWartosciZamowien>2000
+
+#Zadanie 7: CTE z Grupowaniem Znajdź średnią wartość zapasów w magazynach dla produktów z tabeli Inventory. Użyj CTE do stworzenia tymczasowego #zestawu danych.
+WITH SredniePoziomyZapasowProduktow AS
+(
+  SELECT ProductID, ROUND(AVG(StockLevel), 2) AS `SredniPoziomZapasow`
+  FROM `sklep.Inventory`
+  GROUP BY ProductID
+  ORDER BY ProductID
+)
+SELECT *
+FROM SredniePoziomyZapasowProduktow;
+
+#Zadanie 8: CTE z Połączonymi Tabelami Stwórz CTE, które połączy informacje o zamówieniach i produktach. Znajdź łączną wartość zamówień dla #każdej kategorii produktu.
+WITH TotalAmountXCategory AS
+(
+  SELECT P.Category, SUM(O.TotalAmount) AS `Suma sprzedaży w kategorii`
+  FROM `sklep.Orders` AS O
+  LEFT JOIN `sklep.Products` AS P
+  ON O.ProductID=P.ProductID
+  GROUP BY P.Category
+)
+SELECT *
+FROM TotalAmountXCategory;
+
+#Zadanie 9: Zagnieżdżone CTE Znajdź klientów, którzy mają najwięcej zamówień, używając dwóch poziomów CTE.
+WITH OrdersWithMax AS (
+  WITH OrdersPerCustomer AS (
+    SELECT
+      CustomerID,
+      COUNT(DISTINCT OrderID) AS OrderCount
+    FROM
+      `sklep.Orders`
+    GROUP BY
+      CustomerID
+  )
+  SELECT
+    *,
+    (SELECT MAX(OrderCount) FROM OrdersPerCustomer) AS MaxCount
+  FROM
+    OrdersPerCustomer
+)
+SELECT
+  CustomerID,
+  OrderCount
+FROM
+  OrdersWithMax
+WHERE
+  OrderCount = MaxCount;
+
+#Zadanie 10: Zastosowanie CTE do Usunięcia Duplikatów Utwórz CTE, aby znaleźć unikalne kombinacje klientów i produktów, dla których złożono #zamówienia.
+WITH UniqueOrders AS
+  (
+  SELECT CustomerID, ProductID
+  FROM `sklep.Orders`
+  )
+SELECT DISTINCT CustomerID, ProductID
+FROM UniqueOrders;
+
+#Zadanie 1: Ostatnie zamówienie klienta. Dla każdego zamówienia znajdź wartość poprzedniego zamówienia tego samego klienta.
+select CustomerID,
+        row_number() over (partition by CustomerID order by OrderDate) as `Numer zamówienie klienta`,
+        OrderID,
+        TotalAmount,
+        lag(TotalAmount) over (partition by CustomerID order by OrderDate) as `Poprzednia wartosc zamowienia`,
+from `sklep.Orders`
+where CustomerID is not null
+order by CustomerID;
+
+#Zadanie 2: Ranking zamówień według wartości z uwzględnieniem remisów. Utwórz ranking zamówień według wartości (TotalAmount) z uwzględnieniem #remisów, używając funkcji DENSE_RANK.
+select OrderID,
+        TotalAmount,
+        dense_rank() over (order by TotalAmount desc) as `Ranking wartości sprzedaży zamówień`
+from `sklep.Orders`
+where OrderID is not null
+order by `Ranking wartości sprzedaży zamówień`;
+
+#Zadanie 3: Numerowanie zamówień z kolejnością dat. Dla każdego klienta przypisz unikalny numer każdemu zamówieniu, sortując je według daty.
+select OrderID,
+        CustomerID,
+        OrderDate,
+        row_number() over (partition by CustomerID order by OrderDate) as `Numer zamówienia klienta`
+from `sklep.Orders`
+where OrderID is not null
+order by CustomerID;
+
+#Zadanie 4: Następna data zamówienia klienta. Znajdź datę następnego zamówienia dla każdego zamówienia klienta, używając funkcji LEAD.
+select CustomerID,
+        OrderDate,
+        lead(OrderDate) over (partition by CustomerID order by OrderDate) as `Data kolejnego zamówienia klienta`
+from `sklep.Orders`
+where OrderID is not null
+order by CustomerID;
+
+#Zadanie 5: Uzupełnianie brakujących cen w tabeli Orders. Zastąp brakujące wartości w kolumnie ShippedDate dzisiejszą datą.
+
+#wyświetla wszystkie zamówienia
+select OrderID,
+        ShippedDate,
+        case
+          when ShippedDate is null then current_timestamp()
+        end as `Uzupełnione ShippedDate`,
+from `sklep.Orders`;
+
+#wyświetla poprawione zamówienia w ShippedDate
+select OrderID,
+        ShippedDate,
+        case
+          when ShippedDate is null then current_timestamp()
+        end as `Uzupełnione ShippedDate`,
+from `sklep.Orders`
+where ShippedDate is null;
+
+#wyświetla poprawione zamówienia w ShippedDate -> bieżąca data i TotalAmount -> 0
+select OrderID,
+        ShippedDate,
+        case
+          when ShippedDate is null then current_timestamp()
+        end as `Uzupełnione ShippedDate`,
+        case
+          when Totalamount is null then 0
+        end as `Uzupełnione wartosci zamówień`
+from `sklep.Orders`
+where ShippedDate is null or TotalAmount is null;
+
+#Zadanie 6: Kategoria klientów. Kategoryzuj klientów w tabeli Customers na podstawie ich całkowitej wartości zamówień:
+#„Premium”, jeśli wydali więcej niż 2000.
+#„Standard”, jeśli wydali między 1000 a 2000.
+#„Nowi”, jeśli wydali mniej niż 1000.
+select CustomerID,
+        sum(TotalAmount) as `Suma wartości zamówień klienta`,
+        case
+          when sum(TotalAmount)>2000 then 'Premium'
+          when sum(TotalAmount) between 1000 and 2000 then 'Standard'
+          when sum(TotalAmount)<1000 then 'Nowi'
+        end as `Kategoria klienta`
+from `sklep.Orders`
+group by CustomerID
+having CustomerID is not null
+order by CustomerID;
+
+#Zadanie 7: Złożona logika z CASE. W tabeli Orders, oznacz zamówienia jako
+#„Bardzo duże”, jeśli wartość zamówienia jest większa niż 500.
+#„Średnie”, jeśli wartość zamówienia wynosi od 100 do 500.
+#„Małe”, jeśli wartość zamówienia wynosi mniej niż 100.
+select OrderID,
+        TotalAmount,
+        case
+          when TotalAmount>500 then 'Bardzo duże'
+          when TotalAmount between 100 and 500 then 'Średnie'
+          when TotalAmount <100 then 'Małe'
+        end as `Wielkość zamówienia`
+from `sklep.Orders`;
+
+#Zadanie 8: Kategoria regionalna klientów
+#„North America”, jeśli kraj to Kanada lub USA.
+#„Europę”, jeśli kraj to Germany lub UK
+#„Inne” dla pozostałych regionów.
+select CustomerID,
+        CONCAT(FirstName, ' ', LastName),
+        Country,
+        case
+          when Country='USA' then 'North America'
+          when Country='Canada' then 'North America'
+          when Country='Germany' or Country='UK' then 'Europe'
+          else 'Inne'
+        end as `Region`
+from `sklep.Customers`;
+
+#Zadanie 9: Znajdź największą różnicę między kolejnymi zamówieniami tego samego klienta. zestawienie zamówień z datą kolejnego zamówienia klienta
+with ZamowieniaZKolejnym as
+(
+select CustomerID,
+        OrderID,
+        TotalAmount,
+        OrderDate,
+        lead(OrderDate) over (partition by CustomerID order by OrderDate) as DataKolejnegoZamowieniaKlienta,
+from `sklep.Orders`
+order by CustomerID
+),
+RozniceCzasowe as
+(
+select CustomerID,
+        TIMESTAMP_DIFF(DataKolejnegoZamowieniaKlienta, ZamowieniaZKolejnym.OrderDate, day) as RoznicaWDniach
+from ZamowieniaZKolejnym
+)
+select CustomerID,
+        max(RoznicaWDniach) as `Największa różnica czasowa między zamówieniami tego klienta w dniach`
+from RozniceCzasowe
+group by CustomerID
+having `Największa różnica czasowa między zamówieniami tego klienta w dniach` is not null
+order by `Największa różnica czasowa między zamówieniami tego klienta w dniach` desc
+limit 1;
+
