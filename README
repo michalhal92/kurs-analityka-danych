@@ -1,0 +1,37 @@
+# 📊 Portfolio kursowe – Analityk Danych
+
+To repozytorium zawiera projekty i ćwiczenia wykonane w ramach kursu **„Analityk Danych”**.  
+Celem kursu było zdobycie praktycznych umiejętności w zakresie **SQL, Python, Tableau** i zakończyło się pełnym projektem analitycznym na dostarczonej bazie danych.
+---
+
+## 🎯 Zakres umiejętności
+
+Podczas kursu rozwijałem m.in.:
+
+- **SQL** – przygotowanie, czyszczenie i agregacja danych, tworzenie zapytań do analizy biznesowej, wykorzystanie funkcji analitycznych.  
+- **Python** – analiza danych w Pandas, wizualizacje w Matplotlib i Seaborn, podstawowe modele predykcyjne i statystyczne.  
+- **Tableau** – tworzenie interaktywnych dashboardów i wizualizacji KPI.  
+- **Proces analizy danych** – od zbierania danych, ich eksploracji, przygotowania, analizy, po prezentację wyników w formie raportu z rekomendacjami i dashboardów.  
+---
+
+## 🎱 Projekt końcowy
+Cel: Przeanalizuj dane Airbnb, aby zrozumieć, które czynniki najbardziej wpływają na ceny wynajmu i zaproponuj strategie, które pomogą nowym gospodarzom ustalać konkurencyjne ceny swoich ofert.
+Narzędzia: Python, Tableau
+Wnioski i rekomendacje: 
+- Lokalizacja ma największy wpływ na cenę, różnice średnich między osiedlami mogą być bardzo duże, pomiędzy dzielnicami nie są już tak istotne.
+- Typ pokoju również ma znaczenie. 
+  Najwięcej ofert jest na Entire home/apt i Private Room.
+  Entire home/apt ma nieco wyższą średnią cenę. 
+  Shared Room i Hotel Room są rzadko występujące, warto rozważyć to jako niszę do zagospodarowania. 
+  Shared Room ma niższą średnią cenę ale można go wynajać kilkukrotnie co przekłada się na wyższy zarobek.
+  Hotel Room ma średnio wyższą cenę co warto skonfrontować z wyższymi kosztami takiego rozwiązania.
+- Minimalna długość pobytu ma wpływ, im krótsza wymagana tym wyższa cena.
+- Ilość recenzji i ich średnia nie wykazuje wpływu na cenę ale wydaje się być czynnikiem budującym zaufanie i zainteresowanie.
+- Zmienne price_relative_to_neighbourhood_pct i price_relative_to_neighbourhood_group_pct mogą być dobrym odnośnikiem do wyznaczanie ceny w zależności od aktualnego i oczekiwanego przez gospodarzy obłożenia.
+- Polityka anulowania ani weryfikacja gospodarza nie wykazuje bezpośredniego wpływu na cenę.
+---
+
+## 📂 Struktura repozytorium
+SQL_1.sql (1-7) - zapytania SQL które opracowywaliśmy wspólnie i zadania domowe
+Python_1.ipynb (1-7) - kod Python który opracowywaliśmy wspólnie na zajęciach i zadania domowe
+PROJEKT_KOŃCOWY_PYTHON.ipynb - kod Python którym opracowałem bazę danych 
