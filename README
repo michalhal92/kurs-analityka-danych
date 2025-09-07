@@ -1,7 +1,7 @@
 # 📊 Portfolio kursowe – Analityk Danych
 
-To repozytorium zawiera projekty i ćwiczenia wykonane w ramach kursu **„Analityk Danych”**.  
-Celem kursu było zdobycie praktycznych umiejętności w zakresie **SQL, Python, Tableau** i zakończyło się pełnym projektem analitycznym na dostarczonej bazie danych.
+To repozytorium zawiera projekty i ćwiczenia wykonane w ramach kursu **„Analityk Danych”** realizowanego przez Practima. 
+Celem kursu było zdobycie praktycznych umiejętności w zakresie **SQL, Python, Tableau** i zakończyło się pełnym **projektem analitycznym** na dostarczonej bazie danych.
 ---
 
 ## 🎯 Zakres umiejętności
@@ -35,6 +35,6 @@ Wnioski i rekomendacje:
 ---
 
 ## 📂 Struktura repozytorium
+PROJEKT_KOŃCOWY_PYTHON.ipynb - kod Python którym opracowałem bazę danych 
 SQL_1.sql (1-7) - zapytania SQL które opracowywaliśmy wspólnie i zadania domowe
 Python_1.ipynb (1-7) - kod Python który opracowywaliśmy wspólnie na zajęciach i zadania domowe
-PROJEKT_KOŃCOWY_PYTHON.ipynb - kod Python którym opracowałem bazę danych 
